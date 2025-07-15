@@ -1,1 +1,1 @@
-# React-Moive-Info-website
+# CineFinder
