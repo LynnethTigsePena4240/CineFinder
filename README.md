@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project aims to solve a problem or create an experience using key topics from the CPAN 144 course. It will incorporate component-based architecture, state management, routing, styling, API integration, and deployment. The project proposal was due in Week 8 and must be approved by the instructor before development can proceed.
+This project aims to solve a problem or create an experience using key topics from the CPAN 144 course. It will incorporate component-based architecture, state management, routing, styling, API integration, and deployment.
 
 ## Core Features
 
