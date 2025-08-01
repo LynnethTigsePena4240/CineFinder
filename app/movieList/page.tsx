@@ -25,25 +25,45 @@ const movies = [ // Sample movie data for the list page until we can fetch from 
 
 const MovieList = () => {
   return (
-    <div className="movie-list-container">
-      <h1>Movie List</h1>
-      <div className="movie-grid">
-        {movies.map(movie => (
-          <div key={movie.id} className="movie-card">
-            <Image 
-              src={movie.imageUrl} 
-              alt={movie.title} 
-              width={150} 
-              height={225} 
-              style={{ borderRadius: '8px' }} 
-            />
-            <h2>{movie.title}</h2>
-            <p>{movie.description}</p>
-            <Link href={`/moviedetails?id=${movie.id}`}>View Details</Link>
-          </div>
-        ))}
-      </div>
-    </div>
+    <main className="min-h-[calc(100vh-64px)] bg-slate-950 text-white">
+      <section className="max-w-6xl mx-auto px-4 py-10 md:py-14">
+        <h1 className="text-3xl md:text-4xl font-bold mb-8">Movie List</h1>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {movies.map((movie) => (
+            <article
+              key={movie.id}
+              className="group rounded-2xl bg-white/5 shadow-xl ring-1 ring-white/10 hover:ring-white/20 transition overflow-hidden"
+            >
+              <div className="p-4">
+                <div className="relative mx-auto h-[280px] w-[190px]">
+                  <Image
+                    src={movie.imageUrl}
+                    alt={movie.title}
+                    fill
+                    sizes="190px"
+                    className="rounded-lg object-cover"
+                  />
+                </div>
+
+                <h2 className="mt-4 text-lg font-semibold">{movie.title}</h2>
+                <p className="mt-1 text-sm text-white/70 line-clamp-3">
+                  {movie.description}
+                </p>
+
+                <Link
+                  href={`/movieDetail?id=${movie.id}`}
+                  className="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                >
+                  View Details
+                </Link>
+              </div>
+              <div className="h-1 w-0 bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400 transition-all group-hover:w-full" />
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 };
 
