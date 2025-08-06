@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 type Movie = {
   Title: string;
   Poster: string;
-  imdbID: string;
+  imdbID: string; //id of the movie to get more details later
 };
 
 const MovieList = () => {
@@ -16,9 +16,11 @@ const MovieList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
+  //fetch function to get movie data
   useEffect(() => {
     async function fetchMovie() {
       setIsLoading(true);
+      //this tries to fetch the movie data from the API
       try {
         const response = await fetch(
           "https://movie-database-alternative.p.rapidapi.com/?s=the a&r=json",
@@ -31,6 +33,7 @@ const MovieList = () => {
           }
         );
 
+        //if the response to get the data is not ok it then throws an error
         if (!response.ok) throw new Error("Failed to fetch movie");
 
         const data = await response.json();
@@ -42,11 +45,17 @@ const MovieList = () => {
       }
     }
 
+    //calls the fetch function to get the movie data
     fetchMovie();
   }, []);
 
+  //while we wait to get the data we show a loading message
   if (isLoading) return <p>Loading...</p>;
+
+  //if there is an error we show an error message
   if (error) return <p className="text-red-500">{error}</p>;
+
+  //if theres no matches for the search we show a message
   if (!movies) return <p>No movie data found.</p>;
 
   return (
