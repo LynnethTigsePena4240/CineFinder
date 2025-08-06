@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     domains: [
       'www.themoviedb.org',
+      'm.media-amazon.com',
     ],
   },
 };
