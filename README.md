@@ -17,7 +17,7 @@ Show the copyright symbol and the website name at the bottom of every page. The 
 * **Navbar component**
 This stays at the top of every page and lets users switch between pages dynamically to make it run smoothly.
 * **SearchBar component**
-We have this on the homepage as its own component so it's easy to update when we add the search feather to it. It’s used to allow users to search movies/shows and to dynamically show the results as the user type.
+We have this on the homepage as its own component so it's easy to update when we add the search feature to it. It’s used to allow users to search movies/shows to then show the results in the Movie List page.
 
 ### Routes
 
