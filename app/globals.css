@@ -31,7 +31,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   width: 100%;
 }
 
@@ -82,4 +81,89 @@ body {
 .movie-card p {
   font-size: 0.9rem;
   color: #ccc;
+}
+
+/* New styles for Movie Details Page */
+.movie-details-main {
+  min-height: calc(100vh - 64px);
+  background-color: #0c0a0c;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.movie-details-section {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+
+.movie-details-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.movie-details-content {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .movie-details-content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.movie-details-image-container {
+  position: relative;
+  height: 360px;
+  width: 240px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  ring: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.movie-details-poster {
+  object-fit: cover;
+}
+
+.movie-details-info {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  ring: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.info-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.synopsis-container {
+  padding-top: 0.5rem;
+}
+
+.synopsis-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.synopsis-text {
+  color: rgba(255, 255, 255, 0.8);
 }

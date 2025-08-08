@@ -1,18 +1,36 @@
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const SearchBar = () => {
-  return (
-    <div className="w-full flex justify-center">
-      <div className="relative w-full max-w-xl">
-        <input
-          type="text"
-          placeholder="Search for a movie..."
-          className="w-full rounded-full border border-white/15 bg-white/10 px-5 py-3 text-white placeholder-white/60 shadow-lg outline-none backdrop-blur focus:ring-2 focus:ring-white/50"
-        />
-        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/70">⌘</div>
-      </div>
-    </div>
-  );
+    const [searchTerm, setSearchTerm] = useState('');
+    const router = useRouter();
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchTerm) {
+            router.push(`/movieList?search=${searchTerm}`);
+        } else {
+            router.push(`/movieList`);
+        }
+    };
+
+    return (
+        <div className="mt-8 flex justify-center w-full">
+            <form onSubmit={handleSearch} className="flex gap-4 items-center">
+                <input
+                    type="text"
+                    placeholder="Search for a movie..."
+                    className="w-[500px] px-5 py-3 border border-gray-300 rounded-full text-base outline-none focus:border-blue-500 focus:shadow-md transition"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    Search
+                </button>
+            </form>
+        </div>
+    );
 };
 
 export default SearchBar;

@@ -1,29 +1,27 @@
 "use client";
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-
 import { useEffect, useState } from "react";
-
-type Movie = {
-  Title: string;
-  Poster: string;
-  imdbID: string; //id of the movie to get more details later
-};
+import Image from "next/image";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Movie } from "@/app/types";
 
 const MovieList = () => {
-  const [movies, setMovies] = useState<Movie[]>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+  const searchParams = useSearchParams();
+  const searchTerm = searchParams.get("search") || "movie";
 
-  //fetch function to get movie data
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
-    async function fetchMovie() {
+    async function fetchMovies() {
       setIsLoading(true);
-      //this tries to fetch the movie data from the API
+      setError("");
+
       try {
         const response = await fetch(
-          "https://movie-database-alternative.p.rapidapi.com/?s=the a&r=json",
+          `https://movie-database-alternative.p.rapidapi.com/?s=${searchTerm}&r=json&page=${page}`,
           {
             method: "GET",
             headers: {
@@ -33,71 +31,81 @@ const MovieList = () => {
           }
         );
 
-        //if the response to get the data is not ok it then throws an error
-        if (!response.ok) throw new Error("Failed to fetch movie");
+        if (!response.ok) {
+          throw new Error("Failed to fetch movies.");
+        }
 
         const data = await response.json();
-        setMovies(data.Search);
+        if (data.Response === "True" && data.Search) {
+          setMovies(data.Search);
+        } else {
+          setMovies([]);
+          setError("No movies found.");
+        }
       } catch (err: any) {
         setError(err.message);
+        setMovies([]);
       } finally {
         setIsLoading(false);
       }
     }
+    fetchMovies();
+  }, [searchTerm, page]);
 
-    //calls the fetch function to get the movie data
-    fetchMovie();
-  }, []);
+  const handleNextPage = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
-  //while we wait to get the data we show a loading message
-  if (isLoading) return <p>Loading...</p>;
-
-  //if there is an error we show an error message
-  if (error) return <p className="text-red-500">{error}</p>;
-
-  //if theres no matches for the search we show a message
-  if (!movies) return <p>No movie data found.</p>;
+  const handlePreviousPage = () => {
+    setPage((prevPage) => Math.max(1, prevPage - 1));
+  };
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-slate-950 text-white">
-      <section className="max-w-6xl mx-auto px-4 py-10 md:py-14">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8">Movie List</h1>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {movies.map((movie: Movie) => (
-            <article
-              key={movie.imdbID}
-              className="group rounded-2xl bg-white/5 shadow-xl ring-1 ring-white/10 hover:ring-white/20 transition overflow-hidden"
-            >
-              <div className="p-4">
-                <div className="relative mx-auto h-[280px] w-[190px]">
+    <div className="movie-list-container">
+      <h1 className="text-white text-3xl font-bold mb-6 text-center">Movie List Page</h1>
+      {isLoading && <p className="text-center text-white">Loading...</p>}
+      {error && <p className="text-center text-red-500">{error}</p>}
+      {!isLoading && !error && (
+        <>
+          <div className="movie-grid">
+            {movies.map((movie) => (
+              <div key={movie.imdbID} className="movie-card">
+                <div className="relative h-[250px] w-full">
                   <Image
                     src={movie.Poster !== "N/A" ? movie.Poster : "/placeholder.png"}
                     alt={movie.Title}
                     fill
-                    sizes="190px"
-                    className="rounded-lg object-cover"
+                    className="object-cover rounded-lg"
                   />
                 </div>
-
-                <h2 className="mt-4 text-lg font-semibold">{movie.Title}</h2>
-                <p className="mt-1 text-sm text-white/70 line-clamp-3">
-                  {/* {movie.description} */}
-                </p>
-
-                <Link
-                  href={`/movieDetail?id=${movie.imdbID}`}
-                  className="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-                >
-                  View Details
+                <h2 className="text-lg font-semibold mt-4">{movie.Title}</h2>
+                <p className="text-gray-400">{movie.Year}</p>
+                <Link href={`/movieDetail?id=${movie.imdbID}`} passHref>
+                  <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    View Details
+                  </button>
                 </Link>
               </div>
-              <div className="h-1 w-0 bg-gradient-to-r from-indigo-400 via-violet-400 to-fuchsia-400 transition-all group-hover:w-full" />
-            </article>
-          ))}
-        </div>
-      </section>
-    </main>
+            ))}
+          </div>
+          <div className="flex justify-center gap-4 mt-8">
+            <button
+              onClick={handlePreviousPage}
+              disabled={page === 1}
+              className="px-4 py-2 bg-gray-600 text-white rounded-md disabled:opacity-50"
+            >
+              Previous Page
+            </button>
+            <button
+              onClick={handleNextPage}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md"
+            >
+              Next Page
+            </button>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
