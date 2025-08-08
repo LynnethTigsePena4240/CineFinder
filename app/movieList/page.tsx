@@ -8,6 +8,8 @@ import { Movie } from "@/app/types";
 const MovieList = () => {
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get("search") || "movie";
+  const year = searchParams.get("y") || "";
+  const type = searchParams.get("type") || "";
 
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,8 +22,16 @@ const MovieList = () => {
       setError("");
 
       try {
+        let apiUrl = `https://movie-database-alternative.p.rapidapi.com/?s=${searchTerm}&r=json&page=${page}`;
+        if (year) {
+          apiUrl += `&y=${year}`;
+        }
+        if (type) {
+          apiUrl += `&type=${type}`;
+        }
+
         const response = await fetch(
-          `https://movie-database-alternative.p.rapidapi.com/?s=${searchTerm}&r=json&page=${page}`,
+          apiUrl,
           {
             method: "GET",
             headers: {
@@ -50,7 +60,7 @@ const MovieList = () => {
       }
     }
     fetchMovies();
-  }, [searchTerm, page]);
+  }, [searchTerm, year, type, page]);
 
   const handleNextPage = () => {
     setPage((prevPage) => prevPage + 1);
