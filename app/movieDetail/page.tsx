@@ -23,6 +23,21 @@ export default function MovieDetails() {
     setSaved(list.includes(imdbID));
   }, [imdbID]);
 
+  useEffect(() => {
+    if (!imdbID) return;
+    const sync = () => {
+      const list = JSON.parse(localStorage.getItem("watchlist") || "[]") as string[];
+      setSaved(list.includes(imdbID));
+    };
+
+    window.addEventListener("storage", sync);
+    window.addEventListener("watchlist-updated", sync as EventListener);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("watchlist-updated", sync as EventListener);
+    };
+  }, [imdbID]);
+
   const toggleWatchlist = () => {
     if (!imdbID || !movie) return;
     const list = JSON.parse(localStorage.getItem("watchlist") || "[]") as string[];
@@ -35,7 +50,10 @@ export default function MovieDetails() {
       setSaved(true);
     }
     localStorage.setItem("watchlist", JSON.stringify(next));
+
+    window.dispatchEvent(new Event("watchlist-updated"));
   };
+
 
   // --- Data fetch
   useEffect(() => {
@@ -183,6 +201,13 @@ export default function MovieDetails() {
                     : "bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-95 text-white"}`}
               >
                 {saved ? "✓ In Watchlist" : "＋ Add to Watchlist"}
+              </button>
+
+              <button
+                onClick={() => router.push("/watchlist")} 
+                className="w-full rounded-full px-5 py-3 font-semibold bg-white/10 hover:bg-white/15 border border-white/15"
+              >
+                View Watchlist
               </button>
 
               <button

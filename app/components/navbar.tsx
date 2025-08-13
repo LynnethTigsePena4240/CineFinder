@@ -47,6 +47,7 @@ export default function Navbar() {
           <Link href="/" className={`transition duration-300 ${isActive("/")}`}>Home</Link>
           <Link href="/movieList" className={`transition duration-300 ${isActive("/movieList")}`}>Movies</Link>
           <a href="/movieDetail" onClick={handleRandomMovieClick} className={`transition duration-300 ${isActive("/movieDetail")}`}>Random</a>
+          <Link href="/watchlist" className={`transition duration-300 ${isActive("/watchlist")}`}>Watchlist</Link>
         </div>
       </div>
     </nav>
