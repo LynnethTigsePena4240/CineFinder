@@ -5,13 +5,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-type movie = { // 
+type movie = { 
   imdbID: string;
   Title: string;
   Year?: string;
   Poster?: string;
 };
 
+// get movie id from local storage
 function getIds(): string[] {
   try {
     return JSON.parse(localStorage.getItem("watchlist") || "[]") as string[];
@@ -20,18 +21,20 @@ function getIds(): string[] {
   }
 }
 
+
+// set id to local storage
 function setIds(ids: string[]) {
   localStorage.setItem("watchlist", JSON.stringify(ids));
   // notify Navbar and this page in other tabs
   window.dispatchEvent(new Event("watchlist-updated"));
 }
 
+
 export default function WatchlistPage() {
   const [ids, setLocalIds] = useState<string[]>([]);
   const [items, setItems] = useState<movie[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load IDs and stay in sync with changes from other tabs/pages
   useEffect(() => {
     const load = () => setLocalIds(getIds());
     load();
@@ -45,7 +48,7 @@ export default function WatchlistPage() {
     };
   }, []);
 
-  // Fetch movie details for all IDs
+  // get movie details  for movie id 
   useEffect(() => {
     let cancelled = false;
 

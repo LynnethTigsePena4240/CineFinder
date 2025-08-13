@@ -219,9 +219,8 @@ export default function MovieDetails() {
 
               <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(movie.Title + " trailer")}`}
                 className="w-full rounded-full px-5 py-3 font-semibold bg-white/10 hover:bg-white/15 border border-white/15"
-                target="_blank"
-                rel="noopener noreferrer">
-                Watch Trailer
+              >
+                ▶️ Watch Trailer
               </a>
 
             </div>
