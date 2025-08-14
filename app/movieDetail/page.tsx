@@ -1,12 +1,11 @@
+'use client';
 
-"use client";
-
-import { useEffect, useState } from "react";
+import {Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { MovieDetail } from "@/app/types";
 
-export default function MovieDetails() {
+function MovieDetailsClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const imdbID = searchParams.get("id");
@@ -259,5 +258,13 @@ function DetailRow({ label, value }: { label: string; value?: string }) {
       <span className="text-white/60 w-28 shrink-0">{label}:</span>
       <h2 className="text-white text-lg font-medium">{value}</h2>
     </div>
+  );
+}
+
+export default function MovieDetails() {
+  return (
+    <Suspense fallback={<div className="text-center text-white/70">Loading movie details...</div>}>
+      <MovieDetailsClient />
+    </Suspense>
   );
 }
