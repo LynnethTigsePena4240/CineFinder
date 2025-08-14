@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Movie } from "@/app/types";
 
-export default function MovieList() {
+function MovieListContent() {
   const searchParams = useSearchParams();
   const searchTerm = searchParams.get("search") || "movie";
   const year = searchParams.get("y") || "";
@@ -112,5 +112,13 @@ export default function MovieList() {
         )}
       </section>
     </main>
+  );
+}
+
+export default function MovieList() {
+  return (
+    <Suspense fallback={<div className="text-center text-white/70">Loading movies...</div>}>
+      <MovieListContent />
+    </Suspense>
   );
 }
